@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scratch Card Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        width: 300px;
+        margin: 50px auto;
+    }
+    canvas {
+        border: 2px solid #000;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <canvas id="scratchCanvas" width="300" height="200"></canvas>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d');
+        const scratchImage = new Image();
+        scratchImage.src = 'https://png.pngtree.com/thumb_back/fw800/background/20230610/pngtree-picture-of-a-blue-bird-on-a-black-background-image_2937385.jpg'; 
+        
+        scratchImage.onload = function () {
+            ctx.drawImage(scratchImage, 0, 0, canvas.width, canvas.height);
+        };
+        
+        let isScratching = false;
+        
+        function scratch(e) {
+            if (isScratching) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const radius = 20; 
+                
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        canvas.addEventListener('mousedown', function () {
+            isScratching = true;
+        });
+        
+        canvas.addEventListener('mousemove', scratch);
+        
+        window.addEventListener('mouseup', function () {
+            isScratching = false;
+        });
+    });
+</script>
+</body>
+</html>
